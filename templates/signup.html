@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Custom Theme files -->
+<link href="/static/css/signup_form.css" rel="stylesheet" type="text/css" media="all" />
+<!--web-fonts-->
+<link href='//fonts.googleapis.com/css?family=Jura:400,300,500,600' rel='stylesheet' type='text/css'>
+	<!-- main -->
+
+	<div class="main" style="width:80%;">
+
+		<div class="agile">
+            <div class="signin-form profile">
+                <h1 style="color:black; font-family: sans-serif;">REGISTER</h1><br>
+                <p style="font-family:serif; font-size:20px;">Register below to add favourite products for easy access at a later date</p>
+				<div class="login-form">
+					<form action="/register/" method="post">
+                        {% csrf_token %}
+                        <h2 id="signup_error" style="color:red; font-size:26px; font-family:sens-serif;"> {{ error }}</h2>
+						<input type="text" name="username" id="username" placeholder="User Name" required="" maxlength="20    ">
+                        <input type="email" name="email" id="email" placeholder="Email" required="">
+                        <input type="password" id="password" name="password" placeholder="Password" minlength="8" required="">
+                        <p id="pwd_error" style="color:Red; font-family:serif;"> </p>
+                        <input type="password" name="password_2" id="password_2" placeholder="Confirm Password" required="">
+						<p id="pwd_error_2" style="color:Red; font-family:serif;"> </p>
+                        <p style="font-family:serif;"><input type="checkbox" name="terms" id="terms">
+                            I have read and accept the Terms and Conditions.
+                        </p>
+						<input type="submit" value="REGISTER">
+					</form>
+				</div>
+
+			</div>
+		</div>
+		<div class="clear"></div>
+		<!--//signin-form-->
+	</div>
+
+
+
+
+<!--<div class="container-fluid">-->
+	<!--<div class="row">-->
+	  <!--<div class="col-md-1">-->
+      <!--</div>-->
+	  <!--<div class="col-md-10">-->
+        <!--<div class="jumbotron">-->
+          <!--<h2>Register</h2>-->
+          <!--<form method="post">-->
+            <!--{% csrf_token %}-->
+            <!--&lt;!&ndash; {% for field in form %}-->
+              <!--<p>-->
+                <!--{{ field.label_tag }}<br>-->
+                <!--{{ field }}<br>-->
+                <!--{% if field.help_text %}-->
+                  <!--<small style="color: grey">{{ field.help_text|safe }}</small>-->
+                <!--{% endif %}-->
+                <!--{% for error in field.errors %}-->
+                  <!--<p style="color: red">{{ error }}</p>-->
+                <!--{% endfor %}-->
+              <!--</p>-->
+            <!--{% endfor %} &ndash;&gt;-->
+                <!--<input class="btn btn-success btn-lg pull-right" type="submit" value="Sign up">-->
+                <!--<br>-->
+          <!--</form>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="col-md-1">-->
+      <!--</div>-->
+<!--</div>-->
+
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+
+    <script>
+      $( "#password" ).keyup(function(e) {
+            var len = $("#password").val();
+            if(len.length > 0 && len.length < 8){
+               $("#pwd_error").css('color', 'red');
+               $("#pwd_error").text("Password length is short must be greater than or equal to 8 digits");
+            }
+            <!--if(len.length >= 8)-->
+            else if(len.length >= 8){
+                $("#pwd_error").css('color', 'green');
+                $("#pwd_error").text("Password is Verified");
+            }
+            if(len.length == 0){
+                 $("#pwd_error").text(" ");
+            }
+        });
+
+      $( "#password_2" ).keyup(function(e) {
+            var pwd = $("#password").val();
+            var pwd_2 = $("#password_2").val();
+            if(pwd_2 == pwd ){
+               $("#pwd_error_2").css('color', 'green');
+               $("#pwd_error_2").text("Passwords Verified");
+            }
+            else if(pwd_2 != pwd ){
+                $("#pwd_error_2").css('color', 'red');
+                $("#pwd_error_2").text("Password is not Same....");
+            }
+        });
+    </script>
+{% endblock %}

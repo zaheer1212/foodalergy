@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Custom Theme files -->
+<link href="/static/css/signup_form.css" rel="stylesheet" type="text/css" media="all" />
+<!--web-fonts-->
+<link href='//fonts.googleapis.com/css?family=Jura:400,300,500,600' rel='stylesheet' type='text/css'>
+	<!-- main -->
+	<div class="main" style="width:80%;">
+
+		<div class="agile">
+            <div class="signin-form profile">
+                <h1 style="color:black; font-family: sans-serif;">Log IN</h1><br>
+				<div class="login-form">
+					<form action="/login_user/" method="post">
+                        {% csrf_token %}
+                        <input type="text" name="username" id="username" placeholder="Username" required="">
+                        <input type="password" id="password" name="password" placeholder="Password" minlength="8" required="">
+                        <p id="pwd_error" style="color:Red; font-family:serif;"> </p>
+                        {% if error %}
+                         <h2 style="font-size: 24px;font-family: sans-serif;color: red;"> {{error}} </h2>
+                        {% endif %}
+						<input type="submit" value="LOG IN">
+					</form>
+                    <br>
+                    <a href="{% url "forgot_password" %}" style="font-size:22px; font-family:sens-serif;">Forgot Password</a>
+				</div>
+
+			</div>
+		</div>
+		<div class="clear"></div>
+		<!--//signin-form-->
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--<div class="container-fluid">-->
+	<!--<div class="row">-->
+	  <!--<div class="col-md-2">-->
+      <!--</div>-->
+	  <!--<div class="col-md-8">-->
+        <!--<div class="jumbotron">-->
+          <!--<h2>Login</h2>-->
+          <!--<form method="post">-->
+            <!--{% csrf_token %}-->
+            <!--{{ form.as_p }}-->
+            <!--<input class="btn btn-success btn-lg" type="submit" value="Login">-->
+          <!--</form>-->
+        <!--</div>-->
+      <!--</div>-->
+      <!--<div class="col-md-2">-->
+      <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+{% endblock %}

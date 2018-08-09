@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% load static from staticfiles %}
+
+{% block content%}
+
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-2">
+
+      </div>
+      <div class="col-md-8">
+        <div class="jumbotron">
+          {% include 'abouttext.html' %}
+          {% if not user.is_authenticated %}
+          <p><a class="btn btn-success btn-lg" href="/register/" role="button">Get started</a>
+          {% endif %}
+          <!-- <a class="btn btn-primary btn-lg" href="/checks/" role="button">Lastest Checks</a></p> -->
+        </div>
+
+      </div>
+      <div class="col-md-2">
+          <h3>Food Allergies</h3>
+          {% if allergies %}
+          <ul>
+              {% for a in allergies %}
+              <li>{{ a.allergyName }}</li>
+              {% endfor %}
+          </ul>
+          {% endif %}
+      </div>
+      </div>
+</div>
+
+{% endblock content%}

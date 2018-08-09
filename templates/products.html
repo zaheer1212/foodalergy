@@ -1,0 +1,47 @@
+{% load static from staticfiles %}
+
+<div class="panel {% if p.ok %}panel-success{% elif p.ok is False %}panel-danger{% else %}panel-info{% endif %}">
+  <div class="panel-heading">
+    <div class="panel-title pull-left">
+        {{ p.productBrand }} {{ p.productName }} {{ p.productFlavour }}
+    </div>
+    <div class="panel-title pull-right">
+    </div>
+    <div class="clearfix">
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="media">
+        <div class="media-body">
+            <p>
+                  <form method="post" id="form" action="">
+                        <input type="hidden" id="product_id" name="product_id" value={{ p.productId }} >
+                        <input type="hidden" id="product_name" name="product_name" value={{ p.productName }} >
+                        <input style="margin-left:70%;" type="submit" class="favorite" id="favorite" name="favorite" value="favorite">
+                    </form>
+                {% if p.productAllergies.all %}
+                Contains:
+                    {% if request.session.username %}
+                {% endif %}
+                <ul>
+                {% for x in p.productAllergies.all %}
+                    <li>{{ x.allergyName }}</li>
+                {% endfor %}
+            </ul>
+                {% endif %}
+
+            </p>
+        </div>
+        {% if p.productImage %}
+        <div class="media-right"><img class="media-object" data-src="" alt="" style="height: 120px;" src="/media/{{ p.productImage }}" data-holder-rendered="true">
+        </div>
+        {% endif %}
+    </div>
+
+
+  </div>
+</div>
+
+{% block javascript %}
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+{% endblock %}

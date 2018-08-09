@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+
+{% load static from staticfiles %}
+
+{% block title %}Food Allergy Shopping Database{% endblock title %}
+
+{% block content %}
+
+<div class="container-fluid">
+     <div class="row">
+    <div class="col-md-4">
+            <h3>Categories</h3>
+            <ul>
+                {% for x in categories %}
+                <li><a href="{% url 'category' x.categorySlug %}">{{ x.categoryName }}</a></li>
+                {% endfor %}
+            </ul>
+        <div>
+                    <span>
+                        <h3> Search:.</h3>
+                    </span>
+                <form method="post" action="/search/">
+                    <select name="search_option">
+                        <option value="category">Category</option>
+                        <option value="product">Product</option>
+                        <option value="allergy">Allergan Product</option>
+                    </select>
+                    {% csrf_token %}
+                    <input style="width:80%" type="text" id="search_value" name="search_value"
+                           placeholder="Search For Category, Product Or Allergy">
+                    <input type="submit" value="search">
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            {% if products %}
+            <h3>{{ category }} to consider*</h3>
+
+            {% for p in products %}
+            <div class="panel {% if p.ok %}panel-success{% elif p.ok is False %}panel-danger{% else %}panel-info{% endif %}">
+                <div class="panel-heading">
+                    <div class="panel-title pull-left">
+                        {{ p.productBrand }} {{ p.productName }} {{ p.productFlavour }}
+                    </div>
+                    <div class="panel-title pull-right">
+                    </div>
+                    <div class="clearfix">
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="media">
+                        <div class="media-body">
+                            <p>
+                            {% if request.session.username %}
+                            <form method="post" id="form" action="">
+                                {% csrf_token %}
+                                <input type="hidden" id="product_id" name="product_id" value={{ p.productId }}>
+                                <input type="hidden" id="product_name" name="product_name" value={{ p.productName }}>
+                                {% if p.productId in favourites %}
+                                <input style="margin-left:38%;width: 62%;" type="button" class="remove_favorite" id="remove_favorite"
+                                       name="remove_favorite" value=" Remove from Favourites">
+                                {% else %}
+                                <input style="margin-left:38%;width: 62%" type="button" class="favorite" id="favorite"
+                                       name="favorite" value="Add to Favourites">
+                                {% endif %}
+                            </form>
+                            {% else %}
+                            {% endif %}
+                            {% if p.productAllergies.all %}
+                            Contains:
+                            <ul>
+                                {% for x in p.productAllergies.all %}
+                                <li>{{ x.allergyName }}</li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+
+                            </p>
+                        </div>
+                        {% if p.productImage %}
+                        <div class="media-right"><img class="media-object" data-src="" alt="" style="height: 120px;"
+                                                      src="/media/{{ p.productImage }}" data-holder-rendered="true">
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="col-md-3">
+            {% if request.session.username %}
+            <!--<h3>Allergies for {{ request.session.username }}</h3>-->
+            <!--<ul>-->
+            <!--{% for x in user.profile.userAllergies.all %}-->
+            <!--<li>{{ x.allergyName }}</li>-->
+            <!--{% endfor %}-->
+            <!--</ul>-->
+            {% else %}
+            <div class="panel panel-default">
+                <div style="" class="panel-body">
+                    <a href="/login_user">Login</a> or <a href="/register">Register</a>, register your allergies and see
+                    customised view of products to consider and avoid.
+                    <a class="btn btn-success btn-sm" href="/login_user" role="button">Login</a>
+                    <a class="btn btn-success btn-sm" href="/register" role="button">Register</a>
+                </div>
+                <p>* always check the packet for the lastest information on your allergies.</p>
+            </div>
+            {% endif %}
+
+        </div>
+     </div>
+</div>
+
+
+    {% endif %}
+{% endblock content%}
+{% block javascript %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+<script>
+    $("#form .favorite").click(function(){
+        var product_id = $(this).prev().prev().val();
+        var data = "csrfmiddlewaretoken={{ csrf_token }}&product_id="+product_id
+        $.ajax({
+        url: '/featured/',
+        data: "csrfmiddlewaretoken={{ csrf_token }}&product_id="+product_id,
+        type: "POST",
+        success: function(result){
+            console.log(result['message']);
+            alert(result['message']);
+            location.reload();
+        }});
+    });
+</script>
+<script>
+    $("#form .remove_favorite").click(function(){
+        var product_id = $(this).prev().prev().val();
+        var data = "csrfmiddlewaretoken={{ csrf_token }}&product_id="+product_id
+        $.ajax({
+        url: '/remove_favorite/',
+        data: "csrfmiddlewaretoken={{ csrf_token }}&product_id="+product_id,
+        type: "POST",
+        success: function(result){
+            alert(result['message']);
+            location.reload();
+        }});
+    });
+
+</script>
+{% endblock %}

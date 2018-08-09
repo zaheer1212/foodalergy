@@ -1,0 +1,24 @@
+<div class="panel panel-info">
+  <div class="panel-heading">
+    <div class="panel-title pull-left">
+        <a href="{% url 'entrydetail' e.entrySlug %}">{{ e.entryTitle }}</a>
+    </div>
+    <div class="panel-title pull-right">
+    </div>
+    <div class="clearfix">
+    </div>
+  </div>
+  <div class="panel-body">
+    <div class="media">
+        <div class="media-body">
+            <p>{{ e.entryText|safe|slice:":400" }}<a href="{% url 'entrydetail' e.entrySlug %}">...more</a></p>
+        </div> 
+        {% if e.entryImage %}
+        <div class="media-right"><img class="media-object" data-src="" alt="" style="height: 100px;" src="" data-holder-rendered="true"> 
+        </div>
+        {% endif %}
+    </div>
+      
+    
+  </div>
+</div>
